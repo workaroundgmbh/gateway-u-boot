@@ -107,6 +107,7 @@ obj-$(CONFIG_CMD_JFFS2) += jffs2.o
 obj-$(CONFIG_CMD_CRAMFS) += cramfs.o
 obj-$(CONFIG_CMD_LED) += led.o
 obj-$(CONFIG_CMD_LICENSE) += license.o
+obj-$(CONFIG_CMD_LP5569) += lp5569/lp5569.o lp5569/i2c_bitbang.o
 obj-y += load.o
 obj-$(CONFIG_CMD_LOG) += log.o
 obj-$(CONFIG_CMD_LSBLK) += lsblk.o
