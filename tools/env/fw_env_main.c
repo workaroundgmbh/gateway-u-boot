@@ -38,7 +38,7 @@
 #include "fw_env_private.h"
 #include "fw_env.h"
 
-#define CMD_PRINTENV	"fw_printenv"
+#define CMD_PRINTENV	"uboot_printenv"
 #define CMD_SETENV	"fw_setenv"
 static int do_printenv;
 
@@ -206,8 +206,11 @@ int parse_setenv_args(int argc, char *argv[])
 
 int main(int argc, char *argv[])
 {
+#if 0
 	char *lockname = "/run/" CMD_PRINTENV ".lock";
 	int lockfd = -1;
+#endif
+
 	int retval = EXIT_SUCCESS;
 	char *_cmdname;
 
@@ -238,6 +241,7 @@ int main(int argc, char *argv[])
 	argc -= optind;
 	argv += optind;
 
+#if 0
 	if (env_opts.lockname) {
 		lockname = malloc(strlen(env_opts.lockname) +
 				sizeof(CMD_PRINTENV) + 10);
@@ -261,6 +265,7 @@ int main(int argc, char *argv[])
 		close(lockfd);
 		return EXIT_FAILURE;
 	}
+#endif
 
 	if (do_printenv) {
 		if (fw_printenv(argc, argv, noheader, &env_opts) != 0)
@@ -275,10 +280,13 @@ int main(int argc, char *argv[])
 		}
 	}
 
+#if 0
 	if (env_opts.lockname)
 		free(lockname);
 
 	flock(lockfd, LOCK_UN);
 	close(lockfd);
+#endif
+
 	return retval;
 }
