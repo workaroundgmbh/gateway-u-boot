@@ -306,6 +306,7 @@ static int do_fdt(struct cmd_tbl *cmdtp, int flag, int argc, char *const argv[])
 		char *pathp;		/* path */
 		char *nodep;		/* new node to add */
 		int  nodeoffset;	/* node offset from libfdt */
+		int  subnodeoffset; /* subnode offset from libfdt */
 		int  err;
 
 		/*
@@ -329,6 +330,13 @@ static int do_fdt(struct cmd_tbl *cmdtp, int flag, int argc, char *const argv[])
 		err = fdt_add_subnode(working_fdt, nodeoffset, nodep);
 		if (err < 0) {
 			printf ("libfdt fdt_add_subnode(): %s\n",
+				fdt_strerror(err));
+			return 1;
+		}
+		subnodeoffset = err;
+		err = fdt_create_phandle(working_fdt, subnodeoffset);
+		if (err < 0) {
+			printf ("libfdt fdt_create_phandle(): %s\n",
 				fdt_strerror(err));
 			return 1;
 		}
