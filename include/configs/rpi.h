@@ -158,7 +158,7 @@
 #include <config_distro_bootcmd.h>
 
 #define CFG_EXTRA_ENV_SETTINGS \
-	"dhcpuboot=usb start; dhcp u-boot.uimg; bootm\0" \
+	"silent=1\0" \
 	ENV_DEVICE_SETTINGS \
 	ENV_DFU_SETTINGS \
 	ENV_MEM_LAYOUT_SETTINGS \
