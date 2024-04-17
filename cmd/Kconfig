@@ -1099,6 +1099,11 @@ config CMD_GPIO
 	help
 	  GPIO support.
 
+config CMD_GPIO_DRIVE_STRENGTH
+	bool "gpio drive strength"
+	help
+	  Control the GPIOs drive strentgh
+
 config CMD_LP5569
 	bool "lp5569"
 	help
