@@ -92,6 +92,7 @@ obj-$(CONFIG_CMD_FWU_METADATA) += fwu_mdata.o
 obj-$(CONFIG_CMD_GETTIME) += gettime.o
 obj-$(CONFIG_CMD_GPIO) += gpio.o
 obj-$(CONFIG_CMD_HISTORY) += history.o
+obj-$(CONFIG_CMD_GPIO_DRIVE_STRENGTH) += gpio_drive_strength.o
 obj-$(CONFIG_CMD_LP5569) += lp5569/lp5569.o lp5569/i2c_bitbang.o
 obj-$(CONFIG_CMD_HVC) += smccc.o
 obj-$(CONFIG_CMD_I2C) += i2c.o

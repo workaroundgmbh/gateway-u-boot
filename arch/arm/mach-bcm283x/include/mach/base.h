@@ -10,6 +10,7 @@ extern unsigned long rpi_mbox_base;
 extern unsigned long rpi_timer_base;
 extern unsigned long rpi_sdhci_base;
 extern unsigned long rpi_wdog_base;
+extern unsigned long rpi_pm_base;
 
 #ifdef CONFIG_ARMV7_LPAE
 #ifdef CONFIG_TARGET_RPI_4_32B

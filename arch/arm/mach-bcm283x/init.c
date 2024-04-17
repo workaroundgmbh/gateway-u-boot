@@ -151,6 +151,7 @@ unsigned long rpi_mbox_base  = 0x3f00b880;
 unsigned long rpi_sdhci_base = 0x3f300000;
 unsigned long rpi_wdog_base  = 0x3f100000;
 unsigned long rpi_timer_base = 0x3f003000;
+unsigned long rpi_pm_base = 0x3f100000;
 
 int arch_cpu_init(void)
 {
@@ -180,6 +181,7 @@ int mach_cpu_init(void)
 	rpi_sdhci_base = io_base + 0x300000;
 	rpi_wdog_base  = io_base + 0x100000;
 	rpi_timer_base = io_base + 0x003000;
+	rpi_pm_base = io_base + 0x100000;
 
 	offset = fdt_node_offset_by_compatible(gd->fdt_blob, soc,
 					       "brcm,bcm2835-mbox");
