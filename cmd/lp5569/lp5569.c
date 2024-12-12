@@ -399,7 +399,13 @@ static int do_lp5569(struct cmd_tbl *cmdtp, int flag, int argc,
 static int do_lp5569_error(struct cmd_tbl *cmdtp, int flag, int argc,
 					 char *const argv[])
 {
-	return lp5569_cmd(1, cmdtp, flag, argc, argv);
+	int ret = lp5569_cmd(1, cmdtp, flag, argc, argv);
+
+	while (1) {
+		udelay(100 * 1000);
+	}
+
+	return ret;
 }
 
 U_BOOT_CMD(lp5569, 1, 0,  do_lp5569,
