@@ -56,12 +56,12 @@
 // RGB LED:         3 3322 2111
 // COLOR:           B GRBG RBGR
 // Bitmask: 0000 0000 0000 0000
-static const uint8_t led_mux_tapes[1][LP5569_MAX_PROGRAM_LEN] = {
+static const uint8_t led_mux_tapes[2][LP5569_MAX_PROGRAM_LEN] = {
 	{
 		// 0000 0000 0000 0010 -> LED 1 selected, green of first RGB
 		0x00, 0x02,
 		// 0000 0000 0010 0000 -> LED 5 selected, blue of second RGB
-		0x00, 0x020,
+		0x00, 0x20,
 		// 0000 0000 1000 0000 -> LED 7 selected, green of third RGB
 		0x00, 0x80,
 		// 0000 0000 0000 0100 -> LED 2 selected, blue of first RGB
@@ -70,10 +70,15 @@ static const uint8_t led_mux_tapes[1][LP5569_MAX_PROGRAM_LEN] = {
 		0x00, 0x10,
 		// 0000 0001 0000 0000 -> LED 8 selected, blue of third RGB
 		0x01, 0x00,
-
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00
+	},
+	{
+		// 0000 0000 0100 1001 -> LED 0/3/6 selected 3 red
+		0x00, 0x49,
+		0x00, 0x49,
+		0x00, 0x49,
+		0x00, 0x49,
+		0x00, 0x49,
+		0x00, 0x49,
 	}
 };
 
@@ -346,9 +351,9 @@ static int lp5569_play_tape(struct gpio_i2c *bus, uint32_t tape_index) {
 	return 0;
 }
 
-static int do_lp5569(struct cmd_tbl *cmdtp, int flag, int argc,
-					 char *const argv[])
-{
+static int lp5569_cmd(uint32_t tape_index,
+					  struct cmd_tbl *cmdtp, int flag, int argc,
+					  char *const argv[]) {
 	struct gpio_i2c gpio_i2c;
 	int ret, ret2;
 	int i;
@@ -371,7 +376,7 @@ static int do_lp5569(struct cmd_tbl *cmdtp, int flag, int argc,
 		goto deinit;
 	}
 
-	if ((ret = lp5569_play_tape(&gpio_i2c, 0)) != 0) {
+	if ((ret = lp5569_play_tape(&gpio_i2c, tape_index)) != 0) {
 		printf("failed to play tape: %d\n", ret);
 		goto deinit;
 	}
@@ -385,6 +390,19 @@ static int do_lp5569(struct cmd_tbl *cmdtp, int flag, int argc,
 	return 0;
 }
 
+static int do_lp5569(struct cmd_tbl *cmdtp, int flag, int argc,
+					 char *const argv[])
+{
+	return lp5569_cmd(0, cmdtp, flag, argc, argv);
+}
+
+static int do_lp5569_error(struct cmd_tbl *cmdtp, int flag, int argc,
+					 char *const argv[])
+{
+	return lp5569_cmd(1, cmdtp, flag, argc, argv);
+}
 
 U_BOOT_CMD(lp5569, 1, 0,  do_lp5569,
-		   "LP5569 over i2c\n", NULL);
+		   "LP5569 boot LEDs over i2c\n", NULL);
+U_BOOT_CMD(lp5569_error, 1, 0,  do_lp5569_error,
+		   "LP5569 error LEDs over i2c\n", NULL);
