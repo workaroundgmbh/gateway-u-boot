@@ -9,8 +9,20 @@
 #ifndef __ENV_H
 #define __ENV_H
 
-#include <config.h>
 #include <compiler.h>
+#ifdef USE_HOSTCC
+/*
+ * Host tools (e.g. tools/env/fw_printenv) are cross-compiled without the
+ * board-specific config.h chain, since they don't have the toolchain's
+ * forced -include of linux/kconfig.h that ordinary target objects get, and
+ * board headers here can rely on macros/types only available with it.
+ * Just pull in enough of kconfig.h to make IS_ENABLED()/CONFIG_IS_ENABLED()
+ * usable below.
+ */
+#include <linux/kconfig.h>
+#else
+#include <config.h>
+#endif
 #include <stdbool.h>
 #include <linux/types.h>
 
