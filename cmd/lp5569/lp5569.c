@@ -351,7 +351,7 @@ static int lp5569_play_tape(struct gpio_i2c *bus, uint32_t tape_index) {
 	return 0;
 }
 
-static int lp5569_cmd(uint32_t tape_index,
+static int lp5569_cmd(int tape_index,
 					  struct cmd_tbl *cmdtp, int flag, int argc,
 					  char *const argv[]) {
 	struct gpio_i2c gpio_i2c;
@@ -363,6 +363,7 @@ static int lp5569_cmd(uint32_t tape_index,
 		return cmd_process_error(cmdtp, ret);
 	}
 
+	/* Try for 1.5 seconds to initialize the LP5569. */
 	for (i = 0; i < 15; i++) {
 		if ((ret = lp5569_init(&gpio_i2c)) != 0) {
 			printf("failed to init lp5569: %d\n", ret);
@@ -376,9 +377,11 @@ static int lp5569_cmd(uint32_t tape_index,
 		goto deinit;
 	}
 
-	if ((ret = lp5569_play_tape(&gpio_i2c, tape_index)) != 0) {
-		printf("failed to play tape: %d\n", ret);
-		goto deinit;
+	if (tape_index >= 0) {
+		if ((ret = lp5569_play_tape(&gpio_i2c, tape_index)) != 0) {
+			printf("failed to play tape: %d\n", ret);
+			goto deinit;
+		}
 	}
 
  deinit:
@@ -396,6 +399,12 @@ static int do_lp5569(struct cmd_tbl *cmdtp, int flag, int argc,
 	return lp5569_cmd(0, cmdtp, flag, argc, argv);
 }
 
+static int do_lp5569_check(struct cmd_tbl *cmdtp, int flag, int argc,
+					 char *const argv[])
+{
+	return lp5569_cmd(-1, cmdtp, flag, argc, argv);
+}
+
 static int do_lp5569_error(struct cmd_tbl *cmdtp, int flag, int argc,
 					 char *const argv[])
 {
@@ -410,5 +419,7 @@ static int do_lp5569_error(struct cmd_tbl *cmdtp, int flag, int argc,
 
 U_BOOT_CMD(lp5569, 1, 0,  do_lp5569,
 		   "LP5569 boot LEDs over i2c\n", NULL);
+U_BOOT_CMD(lp5569_check, 1, 0,  do_lp5569_check,
+		   "LP5569 check LEDs over i2c\n", NULL);
 U_BOOT_CMD(lp5569_error, 1, 0,  do_lp5569_error,
 		   "LP5569 error LEDs over i2c\n", NULL);
