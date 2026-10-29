@@ -390,6 +390,10 @@ static int lp5569_cmd(int tape_index,
 		return cmd_process_error(cmdtp, ret ? ret : ret2);
 	}
 
+	if (ret != 0) {
+		return cmd_process_error(cmdtp, ret);
+	}
+
 	return 0;
 }
 
